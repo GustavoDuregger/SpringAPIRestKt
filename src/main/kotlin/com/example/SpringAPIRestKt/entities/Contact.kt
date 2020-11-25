@@ -17,6 +17,6 @@ class Contact (
 
         @field:NotNull
         @field:Email
-        val email: String
+        var email: String
 
 )

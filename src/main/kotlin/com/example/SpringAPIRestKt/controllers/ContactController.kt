@@ -1,11 +1,11 @@
 package com.example.SpringAPIRestKt.controllers
 
-import ContactRepository
 import com.example.SpringAPIRestKt.entities.Contact
+import com.example.SpringAPIRestKt.repositories.ContactRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.persistence.EntityNotFoundException
-import javax.swing.text.html.parser.Entity
+import javax.validation.Valid
 
 
 @RestController
@@ -20,13 +20,28 @@ class ContactController {
     }
 
     @PostMapping
-    fun create(@RequestBody contact: Contact): Contact{
+    fun create(@Valid @RequestBody contact: Contact): Contact{
         return repository.save(contact)
+    }
+    @GetMapping
+    fun show(@PathVariable("id") id: Long) {
+        val contact = repository.findById(id).orElseThrow{EntityNotFoundException()}
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable("id") id: Long){
+    fun update(@PathVariable("id") id: Long,@Valid @RequestBody newContact: Contact): Contact {
         val contact = repository.findById(id).orElseThrow{EntityNotFoundException()}
 
+        contact.apply {
+            this.name = newContact.name
+            this.email = newContact.email
+        }
+        return repository.save(contact)
+    }
+
+    @DeleteMapping("/id")
+    fun delete(@PathVariable("id") id: Long){
+        val contact= repository.findById(id).orElseThrow{EntityNotFoundException()}
+        repository.delete(contact)
     }
 }
