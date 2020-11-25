@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 import javax.persistence.EntityNotFoundException
 import javax.validation.Valid
 
-
+//Controller
 @RestController
 @RequestMapping("/contact")
 class ContactController {
